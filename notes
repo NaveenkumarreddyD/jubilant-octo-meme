@@ -1,0 +1,201 @@
+registration
+---------------
+create a separate app for the purpose
+
+
+views.py
+-----------
+create a register view
+next create register form that passes to this view.
+for that v import a UserCreationFrom class.
+
+
+and use it in register view.
+
+
+next create template,
+
+
+create a form in it.
+
+add csrf_token to provide security against forgeries.
+
+add key of form value created in views file. in {{form.as_p}}
+
+as_p -- render our form in paragraphs.
+
+
+when v input some data and submit the form.
+since v dont specify where to post those data, so it posted back to the  register route
+
+any request comes to the register route. 
+v create a form and render the form insside a template
+
+if v do a post request, v validate the form data.
+
+setting flash messages
+----------------------
+
+<div class="row">
+    <div class="col-md-8">
+        {% if messages %}
+            {% for msg in messages %}
+            <!-- here v create an alert and grab the message tag for success -->
+            <div class="alert alert-{{msg.tags}}">
+                <!-- specify the message  -->
+                {{msg}}
+            {% endfor %}
+        {% endif %}
+            </div>
+</div>
+
+
+in views.py
+-------------
+
+{{msg.tags}} -- points to below message tag
+messages.success(request, f'Account Created for {username}')
+
+
+
+
+
+
+
+to include the extra fields to the form v  cretead v need to add a new file in our app dir,
+
+and need to import django forms, UserCreationForm and User Model
+
+like,
+
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.models import User
+
+
+now v create a new form class that inherits from UserCreationForm class
+
+like,
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+# import user model
+from django.contrib.auth.models import User
+
+
+# create form
+class RegisterForm(UserCreationForm):
+    # add fields for the form
+    email = forms.EmailField(required=True)
+
+    # Specify Meta class to configure the form with the user model.
+    class Meta:
+        # specify the model to interact with this new form.
+        model = User
+        # specify the field to be shown in the form 
+        fields = ['username', 'email', 'password1', 'password2']
+
+
+
+
+what is class Meta?
+-------------------------
+
+by using class Meta, v gre a nested namespace used to configure our form in relation with model,
+
+so this v let our form to create fields from our model,
+and these new fields will replace the fields already in our form.
+and fields will be created in the order we specify.
+
+simpply put, to manipulate our existing fields in the form
+
+
+
+
+installing 3rd party django application called django-crispy-forms
+
+to style the form more better,
+
+it uses bootstrap 4 styling for the forms.
+
+so to install it,
+
+pip install django-crispy-forms
+
+later in settings.py, specify this app in the installed app and specif which bootstrap this shud use,
+like below,
+
+INSTALLED_APPS = [
+    ...
+
+    'crispy_forms',
+]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+
+
+and load it in template
+like,
+{% load crsipy_forms_tags %}
+
+and specify it after form tag 
+like,
+{{form|crispy}}
+
+
+
+
+
+
+Login and Logout
+---------------------
+
+LoginView and LogoutView -- built in class based views.
+ 
+so import both from django.contrib.auth 
+
+
+then specify path of both login and logiut in urlpatterns
+
+
+from django.contrib.auth import views as auth_views
+
+auth_views is an alias for that views.
+so it do not conflict other views.
+
+urlpatterns = [
+    path('login/', auth_views.LoginView.as_view(template_name='userapp/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view(template_name='userapp/login.html'), name='logout'),
+]
+
+here as_views() mthod takes a parameter called template_name which contains the template to be looked while v route to login/ or logout/
+
+
+login.html
+-------------------
+{{form|crispy}} -- to get the form fields
+
+
+and when v try to login it navigates to accounts/profile/ route.
+which not exist.
+
+so to change that default while user login,
+
+in settings.py file
+
+add this,
+
+LOGN_REDIRECT_URL ='home'
+
+where home is the name of path that navigates to home page.
+
+
+
+
+
+
+
+
+
+
