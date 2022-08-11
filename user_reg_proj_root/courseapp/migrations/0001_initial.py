@@ -16,12 +16,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='CourseModel',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('code', models.CharField(max_length=30)),
                 ('name', models.CharField(max_length=100)),
                 ('duration', models.CharField(max_length=20)),
-                ('fees', models.IntegerField()),
-                ('trainer', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='trainers.TrainerModel')),
+                ('credits', models.IntegerField()),
+                ('trainer', models.ForeignKey(
+                    on_delete=django.db.models.deletion.DO_NOTHING, to='trainers.TrainerModel')),
             ],
         ),
     ]

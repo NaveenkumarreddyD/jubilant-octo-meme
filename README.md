@@ -34,6 +34,12 @@ Create the database:
 python manage.py migrate
 ```
 
+Create the superuser:
+
+```bash
+python manage.py createsuperuser
+```
+
 Finally, run the development server:
 
 ```bash
